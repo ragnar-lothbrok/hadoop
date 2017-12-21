@@ -1,0 +1,5 @@
+hadoop jar target/casestudy-hadoop-mr-one-0.0.1-SNAPSHOT.jar com.edureka.hadoop.mr.DailyTransactionCountMRJob /trainer/new_data/transactions.csv /user/output/
+
+Local system :
+
+/Users/raghugupta/Downloads/hadoop-2.9.0/bin/hadoop jar target/casestudy-hadoop-mr-one-0.0.1-SNAPSHOT.jar com.edureka.hadoop.mr.DailyTransactionCountMRJob /tx /user2/

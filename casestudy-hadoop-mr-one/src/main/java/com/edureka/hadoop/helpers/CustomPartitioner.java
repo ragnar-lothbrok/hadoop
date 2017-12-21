@@ -7,7 +7,7 @@ public class CustomPartitioner extends Partitioner<Text, AggregateWritable> {
 
 	@Override
 	public int getPartition(Text arg0, AggregateWritable arg1, int reducerTasks) {
-		return arg0.hashCode() % reducerTasks;
+		return Math.abs(arg0.hashCode()) % reducerTasks;
 	}
 
 }

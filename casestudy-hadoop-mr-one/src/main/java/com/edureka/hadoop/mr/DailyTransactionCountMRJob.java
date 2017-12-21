@@ -33,7 +33,7 @@ public class DailyTransactionCountMRJob {
 			transaction.setTxId(split[0]);
 			transaction.setCustomerId(Long.parseLong(split[1]));
 			transaction.setMerchantId(Long.parseLong(split[2]));
-			transaction.setTimestamp(split[3].split(" ")[0]);
+			transaction.setTimestamp(split[3].split(" ")[0].trim());
 			transaction.setInvoiceNum(split[4].trim());
 			transaction.setInvoiceAmount(Float.parseFloat(split[5]));
 			transaction.setSegment(split[6].trim());
@@ -52,7 +52,7 @@ public class DailyTransactionCountMRJob {
 				aggregateData.setOrderabove2000(1l);
 			}
 
-			context.write(new Text(transaction.getTimestamp()), aggregateWritable);
+			context.write(new Text(transaction.getTimestamp()+"-"+transaction.getSegment()), aggregateWritable);
 		}
 
 	}
@@ -88,7 +88,7 @@ public class DailyTransactionCountMRJob {
 		job.setPartitionerClass(CustomPartitioner.class);
 		job.setCombinerClass(TxAggregator.class);
 		job.setReducerClass(TxAggregator.class);
-		job.setNumReduceTasks(10);
+		job.setNumReduceTasks(1);
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(AggregateWritable.class);
 		FileInputFormat.addInputPath(job, new Path(args[0]));
