@@ -52,7 +52,9 @@ public class DailyTransactionCountMRJob {
 				aggregateData.setOrderabove2000(1l);
 			}
 
-			context.write(new Text(transaction.getTimestamp()+"-"+transaction.getSegment()), aggregateWritable);
+			aggregateData.setTotalOrder(1l);
+
+			context.write(new Text(transaction.getTimestamp() + "-" + transaction.getSegment()), aggregateWritable);
 		}
 
 	}
@@ -74,6 +76,7 @@ public class DailyTransactionCountMRJob {
 						aggregateData.getOrderbelow2000() + val.getAggregateData().getOrderbelow2000());
 				aggregateData
 						.setOrderbelow500(aggregateData.getOrderbelow500() + val.getAggregateData().getOrderbelow500());
+				aggregateData.setTotalOrder(val.getAggregateData().getTotalOrder() + aggregateData.getTotalOrder());
 
 			}
 			context.write(key, aggregateWritable);

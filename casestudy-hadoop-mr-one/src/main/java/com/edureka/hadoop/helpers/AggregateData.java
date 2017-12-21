@@ -9,6 +9,15 @@ public class AggregateData implements Serializable {
 	private Long orderbelow1000 = 0l;
 	private Long orderbelow2000 = 0l;
 	private Long orderabove2000 = 0l;
+	private Long totalOrder = 0l;
+
+	public Long getTotalOrder() {
+		return totalOrder;
+	}
+
+	public void setTotalOrder(Long totalOrder) {
+		this.totalOrder = totalOrder;
+	}
 
 	public Long getOrderbelow500() {
 		return orderbelow500;

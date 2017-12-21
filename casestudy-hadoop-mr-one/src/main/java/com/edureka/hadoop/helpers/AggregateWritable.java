@@ -33,6 +33,7 @@ public class AggregateWritable implements Writable {
 		out.writeLong(aggregateData.getOrderbelow1000());
 		out.writeLong(aggregateData.getOrderbelow2000());
 		out.writeLong(aggregateData.getOrderabove2000());
+		out.writeLong(aggregateData.getTotalOrder());
 	}
 
 	public void readFields(DataInput in) throws IOException {
@@ -40,6 +41,7 @@ public class AggregateWritable implements Writable {
 		aggregateData.setOrderbelow1000(in.readLong());
 		aggregateData.setOrderbelow2000(in.readLong());
 		aggregateData.setOrderabove2000(in.readLong());
+		aggregateData.setTotalOrder(in.readLong());
 	}
 
 	@Override
