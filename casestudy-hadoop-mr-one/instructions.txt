@@ -6,3 +6,6 @@ Local system :
 
 
 /Users/raghugupta/Downloads/hadoop-2.9.0/bin/hadoop jar target/casestudy-hadoop-mr-one-0.0.1-SNAPSHOT.jar com.edureka.hadoop.mr.MerchantAnalyticsJob /tx /Users /user2/
+
+
+/Users/raghugupta/Downloads/hadoop-2.9.0/bin/hadoop jar target/casestudy-hadoop-mr-one-0.0.1-SNAPSHOT.jar com.edureka.hadoop.custominput.XMLMRJob /xmls /Users /user2/
