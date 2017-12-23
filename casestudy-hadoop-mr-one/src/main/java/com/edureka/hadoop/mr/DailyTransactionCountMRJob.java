@@ -1,7 +1,6 @@
 package com.edureka.hadoop.mr;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import org.apache.hadoop.conf.Configuration;
@@ -23,11 +22,15 @@ public class DailyTransactionCountMRJob {
 
 	public static class TransactionMapper extends Mapper<Object, Text, Text, AggregateWritable> {
 
-		static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
 		// Map method
 		public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
-			String split[] = value.toString().split(",");
+
+			String line = value.toString().replace("\"", "");
+
+			if (line.indexOf("transaction") != -1) {
+				return;
+			}
+			String split[] = line.split(",");
 
 			Transaction transaction = new Transaction();
 			transaction.setTxId(split[0]);
