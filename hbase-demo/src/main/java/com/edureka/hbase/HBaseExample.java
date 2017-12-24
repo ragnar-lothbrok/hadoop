@@ -1,5 +1,7 @@
 package com.edureka.hbase;
 
+import java.io.IOException;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
@@ -8,6 +10,11 @@ import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ConnectionFactory;
+
+import com.edureka.hbase.constants.HbaseConstants;
+import com.edureka.hbase.repositories.SegmentRepository;
+import com.edureka.hbase.repositories.TransactionRepository;
+import com.edureka.hbase.utility.FileUtility;
 
 public class HBaseExample {
 
@@ -25,24 +32,49 @@ public class HBaseExample {
 		Connection connection = ConnectionFactory.createConnection(config);
 
 		Admin admin = connection.getAdmin();
-		
-//		admin.disableTable(TableName.valueOf("transaction"));
-//		
-//		admin.deleteTable(TableName.valueOf("transaction"));
 
-		if (!admin.tableExists(TableName.valueOf("transaction"))) {
-			HTableDescriptor desc = new HTableDescriptor(TableName.valueOf("transaction"));
-			desc.addFamily(new HColumnDescriptor("info"));
-
-			admin.createTable(desc);
-		}
+		createTable(HbaseConstants.TRANSACTION, admin);
+		createTable(HbaseConstants.SEGMENT, admin);
 
 		String filePath = "/Users/raghugupta/Documents/Capstone/transaction.csv";
 
 		TransactionRepository transactionRepository = new TransactionRepository(
-				connection.getTable(TableName.valueOf("transaction")));
+				connection.getTable(TableName.valueOf(HbaseConstants.TRANSACTION)));
 
-		FileUtility.readFile(filePath, transactionRepository);
+		SegmentRepository segmentRepository = new SegmentRepository(
+				connection.getTable(TableName.valueOf(HbaseConstants.SEGMENT)));
 
+		FileUtility.readFile(filePath, transactionRepository, segmentRepository);
+
+		transactionRepository.scan(2l);
+
+		transactionRepository.get("1006");
+
+		segmentRepository.scan(2l);
+
+		segmentRepository.scanByPrefix("Home");
+
+	}
+
+	private static void createTable(String tableName, Admin admin) {
+		try {
+			if (!admin.tableExists(TableName.valueOf(tableName))) {
+				HTableDescriptor desc = new HTableDescriptor(TableName.valueOf(tableName));
+				desc.addFamily(new HColumnDescriptor("info"));
+
+				admin.createTable(desc);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void deleteTable(String tableName, Admin admin) {
+		try {
+			admin.disableTable(TableName.valueOf(tableName));
+			admin.deleteTable(TableName.valueOf(tableName));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

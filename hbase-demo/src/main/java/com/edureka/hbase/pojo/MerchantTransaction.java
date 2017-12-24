@@ -1,4 +1,4 @@
-package com.edureka.hbase;
+package com.edureka.hbase.pojo;
 
 import java.io.Serializable;
 
